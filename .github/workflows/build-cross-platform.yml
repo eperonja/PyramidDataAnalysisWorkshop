@@ -1,0 +1,123 @@
+name: Build cross-platform executables
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch: {}
+
+jobs:
+  build-windows:
+    name: Build for Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+        shell: pwsh
+
+      - name: Build executable (Windows)
+        run: |
+          pyinstaller --onefile --name pyramid_analysis.exe \
+            --add-data "read_pyramid_data.py;." \
+            --add-data "analyze_pyramid_data.py;." \
+            --add-data "plot_pyramid_data_workshop.py;." \
+            --add-data "config;config" \
+            --hidden-import mplcursors \
+            --hidden-import dateutil \
+            --hidden-import dateutil.parser \
+            --hidden-import alive_progress \
+            --hidden-import matplotlib.backends.backend_pdf \
+            main.py
+        shell: pwsh
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyramid_analysis-windows
+          path: dist/pyramid_analysis.exe
+build-linux:
+    name: Build for Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build executable (Linux)
+        run: |
+          pyinstaller --onefile --name pyramid_analysis-linux \
+            --add-data "read_pyramid_data.py:." \
+            --add-data "analyze_pyramid_data.py:." \
+            --add-data "plot_pyramid_data_workshop.py:." \
+            --add-data "config:config" \
+            --hidden-import mplcursors \
+            --hidden-import dateutil \
+            --hidden-import dateutil.parser \
+            --hidden-import alive_progress \
+            --hidden-import matplotlib.backends.backend_pdf \
+            main.py
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyramid_analysis-linux
+          path: dist/pyramid_analysis-linux
+ build-macos:
+    name: Build for macOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build executable (macOS)
+        run: |
+          pyinstaller --onefile --name pyramid_analysis-macos \
+            --add-data "read_pyramid_data.py:." \
+            --add-data "analyze_pyramid_data.py:." \
+            --add-data "plot_pyramid_data_workshop.py:." \
+            --add-data "config:config" \
+            --hidden-import mplcursors \
+            --hidden-import dateutil \
+            --hidden-import dateutil.parser \
+            --hidden-import alive_progress \
+            --hidden-import matplotlib.backends.backend_pdf \
+            main.py
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyramid_analysis-macos
+          path: dist/pyramid_analysis-macos
