@@ -56,11 +56,20 @@ jobs:
             main.py
         shell: pwsh
 
+      - name: Show `dist` contents (Windows)
+        run: |
+          if (Test-Path -LiteralPath dist) {
+            Get-ChildItem -Path dist -Recurse -Force | Format-Table
+          } else {
+            Write-Host "dist directory not found"
+          }
+        shell: pwsh
+
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
           name: pyramid_analysis-windows
-          path: dist/pyramid_analysis.exe
+          path: dist/**
 
   build-linux:
     name: Build for Linux
@@ -96,11 +105,19 @@ jobs:
             --hidden-import matplotlib.backends.backend_pdf \
             main.py
 
+      - name: Show `dist` contents (Linux)
+        run: |
+          if [ -d dist ]; then
+            ls -la dist || true
+          else
+            echo "dist directory not found"
+          fi
+
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
           name: pyramid_analysis-linux
-          path: dist/pyramid_analysis-linux
+          path: dist/**
 
   build-macos:
     name: Build for macOS
@@ -136,9 +153,17 @@ jobs:
             --hidden-import matplotlib.backends.backend_pdf \
             main.py
 
+      - name: Show `dist` contents (macOS)
+        run: |
+          if [ -d dist ]; then
+            ls -la dist || true
+          else
+            echo "dist directory not found"
+          fi
+
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
           name: pyramid_analysis-macos
-          path: dist/pyramid_analysis-macos
+          path: dist/**
 
