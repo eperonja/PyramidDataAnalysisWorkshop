@@ -47,7 +47,8 @@ jobs:
         with:
           name: pyramid_analysis-windows
           path: dist/pyramid_analysis.exe
-build-linux:
+
+  build-linux:
     name: Build for Linux
     runs-on: ubuntu-latest
     steps:
@@ -84,7 +85,8 @@ build-linux:
         with:
           name: pyramid_analysis-linux
           path: dist/pyramid_analysis-linux
- build-macos:
+
+  build-macos:
     name: Build for macOS
     runs-on: macos-latest
     steps:
@@ -121,3 +123,4 @@ build-linux:
         with:
           name: pyramid_analysis-macos
           path: dist/pyramid_analysis-macos
+
