@@ -11,6 +11,13 @@ on:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
+# The repository contains the project inside the `PyramidDataAnalysisWorkshop` subfolder.
+# Set the default working directory for run steps so `requirements.txt` and other files
+# are found without changing each run command.
+defaults:
+  run:
+    working-directory: PyramidDataAnalysisWorkshop
+
 jobs:
   build-windows:
     name: Build for Windows
