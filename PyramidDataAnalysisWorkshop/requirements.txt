@@ -1,0 +1,4 @@
+matplotlib
+alive-progress
+mplcursors
+python-dateutil
