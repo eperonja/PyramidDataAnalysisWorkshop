@@ -31,16 +31,17 @@ jobs:
 
       - name: Build executable (Windows)
         run: |
-          pyinstaller --onefile --name pyramid_analysis.exe \
-            --add-data "read_pyramid_data.py;." \
-            --add-data "analyze_pyramid_data.py;." \
-            --add-data "plot_pyramid_data_workshop.py;." \
-            --add-data "config;config" \
-            --hidden-import mplcursors \
-            --hidden-import dateutil \
-            --hidden-import dateutil.parser \
-            --hidden-import alive_progress \
-            --hidden-import matplotlib.backends.backend_pdf \
+          # PowerShell uses the backtick ` as the line continuation character (not the backslash).
+          pyinstaller --onefile --name pyramid_analysis.exe `
+            --add-data "read_pyramid_data.py;." `
+            --add-data "analyze_pyramid_data.py;." `
+            --add-data "plot_pyramid_data_workshop.py;." `
+            --add-data "config;config" `
+            --hidden-import mplcursors `
+            --hidden-import dateutil `
+            --hidden-import dateutil.parser `
+            --hidden-import alive_progress `
+            --hidden-import matplotlib.backends.backend_pdf `
             main.py
         shell: pwsh
 
